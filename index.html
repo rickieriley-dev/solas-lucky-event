@@ -131,83 +131,6 @@
     line-height:1.4;
   }
 
-  /* ---------- EVENT BANNER ---------- */
-  .event-banner{
-    margin-top:10px;
-    border-radius:16px;
-    padding:13px 14px 11px;
-    background:linear-gradient(135deg, rgba(255,77,141,0.18), rgba(155,93,229,0.18));
-    border:1px solid rgba(255,77,141,0.35);
-    backdrop-filter:blur(6px);
-    position:relative;
-    overflow:hidden;
-  }
-  .event-banner::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:linear-gradient(90deg, transparent, rgba(255,209,102,0.06), transparent);
-    animation:shimmer 3s ease-in-out infinite;
-  }
-  @keyframes shimmer{
-    0%,100%{ transform:translateX(-100%); }
-    50%{ transform:translateX(100%); }
-  }
-  .event-badge{
-    display:inline-flex;
-    align-items:center;
-    gap:5px;
-    background:linear-gradient(90deg, var(--rose), var(--violet));
-    border-radius:20px;
-    padding:3px 10px;
-    font-size:10px;
-    font-weight:800;
-    letter-spacing:0.12em;
-    color:#fff;
-    text-transform:uppercase;
-    margin-bottom:8px;
-  }
-  .event-title{
-    text-align:center;
-    font-size:13px;
-    font-weight:800;
-    color:var(--gold-light);
-    margin-bottom:2px;
-    text-shadow:0 0 12px rgba(255,209,102,0.35);
-  }
-  .event-ctd-grid{
-    display:flex;
-    justify-content:center;
-    gap:6px;
-    margin-top:9px;
-  }
-  .event-ctd-unit{ text-align:center; width:52px; }
-  .event-ctd-box{
-    background:linear-gradient(180deg, rgba(255,77,141,0.18), rgba(155,93,229,0.10));
-    border:1px solid rgba(255,77,141,0.4);
-    border-radius:10px;
-    padding:6px 0;
-    font-family:"Courier New",monospace;
-    font-weight:800;
-    font-size:17px;
-    color:#fff;
-    box-shadow:inset 0 0 10px rgba(255,77,141,0.1);
-  }
-  .event-ctd-unit .event-ctd-tag{
-    margin-top:3px;
-    font-size:9px;
-    letter-spacing:0.1em;
-    color:var(--text-dim);
-    text-transform:uppercase;
-  }
-  .event-ended{
-    text-align:center;
-    font-size:13px;
-    font-weight:800;
-    color:var(--text-dim);
-    padding:6px 0;
-  }
-
   /* ---------- WHEEL STAGE ---------- */
   .wheel-stage{
     position:relative;
@@ -452,80 +375,6 @@
     background:var(--gold); color:#2b1f06; font-weight:800; cursor:pointer;
   }
 
-  /* ---------- WIN MODAL ---------- */
-  .win-modal-box{
-    background:linear-gradient(180deg, var(--bg-2), var(--bg-3));
-    border:1px solid rgba(255,209,102,0.5);
-    border-radius:22px;
-    padding:32px 24px 24px;
-    max-width:320px;
-    width:100%;
-    text-align:center;
-    position:relative;
-    overflow:hidden;
-  }
-  .win-modal-box::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:radial-gradient(circle at 50% 0%, rgba(255,209,102,0.12), transparent 65%);
-    pointer-events:none;
-  }
-  .win-modal-icon{
-    font-size:52px;
-    line-height:1;
-    margin-bottom:12px;
-    animation:popIn 0.4s cubic-bezier(.175,.885,.32,1.275) both;
-  }
-  @keyframes popIn{
-    0%{ transform:scale(0.4); opacity:0; }
-    100%{ transform:scale(1); opacity:1; }
-  }
-  .win-modal-title{
-    font-size:22px;
-    font-weight:900;
-    color:var(--gold-light);
-    text-shadow:0 0 20px rgba(255,209,102,0.5);
-    margin-bottom:6px;
-  }
-  .win-modal-amount{
-    font-size:40px;
-    font-weight:900;
-    font-family:"Courier New",monospace;
-    color:#fff;
-    margin:10px 0 6px;
-    text-shadow:0 0 24px rgba(255,255,255,0.3);
-  }
-  .win-modal-amount.empty{
-    font-size:22px;
-    color:var(--text-dim);
-  }
-  .win-modal-sub{
-    font-size:12px;
-    color:var(--text-dim);
-    margin-bottom:22px;
-  }
-  .win-modal-btn{
-    width:100%;
-    padding:14px;
-    border:none;
-    border-radius:14px;
-    font-size:15px;
-    font-weight:800;
-    letter-spacing:0.04em;
-    cursor:pointer;
-    background:linear-gradient(180deg, var(--gold-light), var(--gold));
-    color:#3b2406;
-    box-shadow:0 5px 0 rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.5);
-  }
-  .win-modal-btn:active{ transform:translateY(3px); box-shadow:0 2px 0 rgba(0,0,0,0.3); }
-  .win-modal-btn.try-again{
-    background:linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.05));
-    color:var(--text);
-    border:1px solid var(--card-border);
-    box-shadow:0 5px 0 rgba(0,0,0,0.3);
-  }
-
   .toast{
     position:fixed; bottom:18px; left:50%;
     transform:translateX(-50%) translateY(20px);
@@ -546,19 +395,6 @@
     <div class="icon-btn" id="backBtn">←</div>
     <div class="title">Lucky Wheel</div>
     <div class="icon-btn" id="helpBtn">?</div>
-  </div>
-
-  <div class="event-banner" id="eventBanner">
-    <div style="display:flex;justify-content:center;">
-      <div class="event-badge">🎡 Limited Event</div>
-    </div>
-    <div class="event-title">Lucky Wheel Event</div>
-    <div class="event-ctd-grid" id="eventCtdGrid">
-      <div class="event-ctd-unit"><div class="event-ctd-box" id="evtDay">30</div><div class="event-ctd-tag">Days</div></div>
-      <div class="event-ctd-unit"><div class="event-ctd-box" id="evtHour">00</div><div class="event-ctd-tag">Hours</div></div>
-      <div class="event-ctd-unit"><div class="event-ctd-box" id="evtMin">00</div><div class="event-ctd-tag">Mins</div></div>
-      <div class="event-ctd-unit"><div class="event-ctd-box" id="evtSec">00</div><div class="event-ctd-tag">Secs</div></div>
-    </div>
   </div>
 
   <div class="countdown-card" id="countdownCard">
@@ -596,6 +432,13 @@
   <button class="spin-btn" id="spinBtn" disabled>SPIN ×1</button>
   <div class="spin-sub" id="spinSub">No chances remaining — check back soon</div>
 
+  <div class="result-banner" id="resultBanner"></div>
+
+  <div class="legend">
+    <div class="label">On the wheel</div>
+    <div class="legend-grid" id="legendGrid"></div>
+  </div>
+
   <div class="footer-note">Lucky Wheel rewards are in-app coins only.</div>
 </div>
 
@@ -614,16 +457,6 @@
   </div>
 </div>
 
-<div class="modal-overlay" id="winModalOverlay">
-  <div class="win-modal-box" id="winModalBox">
-    <div class="win-modal-icon" id="winModalIcon">🎉</div>
-    <div class="win-modal-title" id="winModalTitle">You won!</div>
-    <div class="win-modal-amount" id="winModalAmount"></div>
-    <div class="win-modal-sub" id="winModalSub"></div>
-    <button class="win-modal-btn" id="winModalBtn">Awesome!</button>
-  </div>
-</div>
-
 <div class="toast" id="toast"></div>
 
 <script>
@@ -634,23 +467,6 @@
   var MAX_CHANCES = 5;
   var CHANCE_INTERVAL_MS = 2 * 60 * 60 * 1000; // 1 free chance every 2 hours
   var MAX_BALANCE = 999999999;
-
-  // Event duration: 30 days from first load, stored so it persists across sessions.
-  var EVENT_STORAGE_KEY = "luckyWheel_eventEnd_v1";
-  var EVENT_DURATION_MS = 30 * 24 * 60 * 60 * 1000;
-  function getEventEnd(){
-    try{
-      var stored = localStorage.getItem(EVENT_STORAGE_KEY);
-      if(stored){
-        var val = parseInt(stored, 10);
-        if(isFinite(val) && val > 0) return val;
-      }
-    }catch(e){}
-    var end = Date.now() + EVENT_DURATION_MS;
-    try{ localStorage.setItem(EVENT_STORAGE_KEY, String(end)); }catch(e){}
-    return end;
-  }
-  var EVENT_END_MS = getEventEnd();
 
   // 8 segments: label, coin amount, color. Weighted by `w` (out of 100).
   var PRIZES = Object.freeze([
@@ -741,6 +557,38 @@
   }
 
   var state = loadState();
+
+  function getInitialCredits(){
+    var fromGlobal = Number(window.__INITIAL_CREDITS);
+    if(isFinite(fromGlobal) && fromGlobal >= 0) return clampInt(fromGlobal, MAX_BALANCE);
+    try{
+      var params = new URLSearchParams(window.location.search || "");
+      var fromQuery = Number(params.get("coins"));
+      if(isFinite(fromQuery) && fromQuery >= 0) return clampInt(fromQuery, MAX_BALANCE);
+    }catch(e){}
+    return null;
+  }
+
+  function postWalletMessage(type, amount){
+    var payload = JSON.stringify({
+      source: "Lucky Wheel",
+      type: type,
+      amount: Math.abs(amount || 0),
+      delta: type === "bet" ? -Math.abs(amount || 0) : Math.abs(amount || 0),
+      balance: state.balance
+    });
+    try{
+      if(window.WalletChannel && window.WalletChannel.postMessage){
+        window.WalletChannel.postMessage(payload);
+      }
+    }catch(e){}
+  }
+
+  var initialCredits = getInitialCredits();
+  if(initialCredits !== null){
+    state.balance = initialCredits;
+    saveState();
+  }
 
   // Catch up silently on any chances earned while the app was closed.
   (function catchUpOffline(){
@@ -840,33 +688,6 @@
       chip.textContent = p.amt > 0 ? (p.amt + " coins") : "Try again";
       grid.appendChild(chip);
     });
-  }
-
-  /* ================= EVENT COUNTDOWN ================= */
-  function renderEventCountdown(){
-    var now = Date.now();
-    var diff = Math.max(0, EVENT_END_MS - now);
-    var banner = document.getElementById("eventBanner");
-    var grid = document.getElementById("eventCtdGrid");
-
-    if(diff <= 0){
-      grid.innerHTML = '<div class="event-ended">🏁 Event has ended</div>';
-      // Disable spinning when event is over
-      document.getElementById("spinBtn").disabled = true;
-      document.getElementById("spinSub").textContent = "This event has ended — thanks for playing!";
-      return;
-    }
-
-    var totalSec = Math.floor(diff / 1000);
-    var days  = Math.floor(totalSec / 86400);
-    var hours = Math.floor((totalSec % 86400) / 3600);
-    var mins  = Math.floor((totalSec % 3600) / 60);
-    var secs  = totalSec % 60;
-    function pad(n){ return (n < 10 ? "0" : "") + n; }
-    document.getElementById("evtDay").textContent  = pad(days);
-    document.getElementById("evtHour").textContent = pad(hours);
-    document.getElementById("evtMin").textContent  = pad(mins);
-    document.getElementById("evtSec").textContent  = pad(secs);
   }
 
   /* ================= RENDER ================= */
@@ -983,7 +804,8 @@
     renderStats();
 
     var banner = document.getElementById("resultBanner");
-    if(banner){ banner.classList.remove("show","empty"); banner.textContent = ""; }
+    banner.classList.remove("show","empty");
+    banner.textContent = "";
 
     var idx = pickPrizeIndex();
     var center = idx * SEG_ANGLE + SEG_ANGLE/2;
@@ -1005,47 +827,21 @@
       var prize = PRIZES[idx];
       if(prize.amt > 0){
         state.balance = clampInt(state.balance + prize.amt, MAX_BALANCE);
+        banner.classList.add("show");
+        banner.textContent = "🎉 You won " + prize.amt + " coins!";
+        postWalletMessage("win", prize.amt);
         vibrate([0,60,40,60]);
         beep(880, 0.18, "sine", 0.07);
         if(prize.amt >= 100) burstConfetti();
-        showWinModal(prize.amt, false);
       }else{
+        banner.classList.add("show","empty");
+        banner.textContent = "No coins this time — try again!";
         vibrate(70);
-        showWinModal(0, true);
       }
       saveState();
       isSpinning = false;
       renderStats();
     }, 3700);
-  }
-
-  /* ================= WIN MODAL ================= */
-  function showWinModal(amt, isEmpty){
-    var overlay = document.getElementById("winModalOverlay");
-    var icon    = document.getElementById("winModalIcon");
-    var title   = document.getElementById("winModalTitle");
-    var amount  = document.getElementById("winModalAmount");
-    var sub     = document.getElementById("winModalSub");
-    var btn     = document.getElementById("winModalBtn");
-
-    if(isEmpty){
-      icon.textContent  = "😢";
-      title.textContent = "No luck this time";
-      amount.textContent = "Try Again";
-      amount.classList.add("empty");
-      sub.textContent   = "Better luck on your next spin!";
-      btn.textContent   = "Try Again";
-      btn.className     = "win-modal-btn try-again";
-    } else {
-      icon.textContent  = amt >= 100 ? "🏆" : "🎉";
-      title.textContent = "You won!";
-      amount.textContent = "+" + amt + " coins";
-      amount.classList.remove("empty");
-      sub.textContent   = "Added to your balance";
-      btn.textContent   = "Awesome!";
-      btn.className     = "win-modal-btn";
-    }
-    overlay.classList.add("show");
   }
 
   /* ================= NAV / MODAL ================= */
@@ -1066,12 +862,6 @@
   modal.addEventListener("click", function(e){ if(e.target === modal) modal.classList.remove("show"); });
   document.getElementById("spinBtn").addEventListener("click", spin);
 
-  var winOverlay = document.getElementById("winModalOverlay");
-  document.getElementById("winModalBtn").addEventListener("click", function(){
-    winOverlay.classList.remove("show");
-  });
-  winOverlay.addEventListener("click", function(e){ if(e.target === winOverlay) winOverlay.classList.remove("show"); });
-
   /* ---------- deterrents (not real security, just friction) ---------- */
   document.addEventListener("contextmenu", function(e){ e.preventDefault(); });
   document.addEventListener("keydown", function(e){
@@ -1085,11 +875,10 @@
   buildWheel();
   buildBulbRing();
   buildHubRays();
+  buildLegend();
   renderStats();
   renderCountdown();
-  renderEventCountdown();
   setInterval(renderCountdown, 1000);
-  setInterval(renderEventCountdown, 1000);
   if(tamperDetected) toast("Save data was invalid — progress reset");
 
 })();
