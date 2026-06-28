@@ -1,888 +1,1030 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:;">
-<meta http-equiv="X-Content-Type-Options" content="nosniff">
-<meta name="referrer" content="no-referrer">
-<title>Lucky Wheel</title>
-<style>
-  :root{
-    --bg-1:#1b0f3d;
-    --bg-2:#2d1660;
-    --bg-3:#120829;
-    --gold:#ffd166;
-    --gold-light:#ffe9a8;
-    --card:rgba(255,255,255,0.06);
-    --card-border:rgba(255,255,255,0.14);
-    --text:#f6f1ff;
-    --text-dim:rgba(246,241,255,0.62);
-    --coral:#ff6b6b;
-    --tangerine:#ff9f45;
-    --violet:#9b5de5;
-    --sky:#4cc9f0;
-    --mint:#06d6a0;
-    --rose:#ff4d8d;
-    --indigo:#5e60ce;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:;">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta name="referrer" content="no-referrer">
+  <title>Lucky Wheel</title>
+  <style>
+    :root {
+      --bg-1: #1b0f3d;
+      --bg-2: #2d1660;
+      --bg-3: #120829;
+      --gold: #ffd166;
+      --gold-light: #ffe9a8;
+      --card: rgba(255, 255, 255, 0.06);
+      --card-border: rgba(255, 255, 255, 0.14);
+      --text: #f6f1ff;
+      --text-dim: rgba(246, 241, 255, 0.62);
+      --coral: #ff6b6b;
+      --tangerine: #ff9f45;
+      --violet: #9b5de5;
+      --sky: #4cc9f0;
+      --mint: #06d6a0;
+      --rose: #ff4d8d;
+      --indigo: #5e60ce;
+    }
 
-  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  html,body{ margin:0; padding:0; min-height:100%; overflow-x:hidden; }
-  body{
-    min-height:100dvh;
-    overscroll-behavior:none;
-    touch-action:manipulation;
-    -webkit-user-select:none; user-select:none;
-    font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    color:var(--text);
-    background:
-      radial-gradient(circle at 50% -10%, rgba(255,209,102,0.16), transparent 50%),
-      radial-gradient(circle at 85% 18%, rgba(255,77,141,0.14), transparent 45%),
-      radial-gradient(circle at 10% 75%, rgba(76,201,240,0.10), transparent 45%),
-      linear-gradient(180deg, var(--bg-1), var(--bg-2) 55%, var(--bg-3));
-    display:flex;
-    justify-content:center;
-    padding: env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0);
-  }
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-  .app{
-    width:100%;
-    max-width:480px;
-    min-height:100dvh;
-    display:flex;
-    flex-direction:column;
-    padding:8px 16px 48px;
-  }
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      overflow-x: hidden;
+    }
 
-  /* ---------- HEADER ---------- */
-  .header{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:6px 2px;
-  }
-  .icon-btn{
-    width:34px;height:34px;
-    border-radius:50%;
-    background:var(--card);
-    border:1px solid var(--card-border);
-    color:var(--text);
-    display:flex;align-items:center;justify-content:center;
-    font-size:16px;
-    cursor:pointer;
-    flex-shrink:0;
-  }
-  .header .title{
-    font-weight:800;
-    font-size:17px;
-    letter-spacing:0.03em;
-    color:var(--gold-light);
-    text-shadow:0 0 16px rgba(255,209,102,0.4);
-  }
+    body {
+      min-height: 100dvh;
+      -webkit-user-select: none;
+      user-select: none;
+      font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 50% -10%, rgba(255, 209, 102, 0.16), transparent 50%),
+        radial-gradient(circle at 85% 18%, rgba(255, 77, 141, 0.14), transparent 45%),
+        radial-gradient(circle at 10% 75%, rgba(76, 201, 240, 0.10), transparent 45%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2) 55%, var(--bg-3));
+      padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
+    }
 
-  /* ---------- COUNTDOWN CARD ---------- */
-  .countdown-card{
-    margin-top:10px;
-    border-radius:16px;
-    padding:14px 14px 12px;
-    background:var(--card);
-    border:1px solid var(--card-border);
-    backdrop-filter:blur(6px);
-  }
-  .countdown-card .ctd-label{
-    text-align:center;
-    font-size:11px;
-    font-weight:700;
-    letter-spacing:0.1em;
-    color:var(--text-dim);
-    text-transform:uppercase;
-  }
-  .ctd-grid{
-    display:flex;
-    justify-content:center;
-    gap:8px;
-    margin-top:8px;
-  }
-  .ctd-unit{ text-align:center; width:58px; }
-  .ctd-box{
-    background:linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.02));
-    border:1px solid rgba(255,209,102,0.35);
-    border-radius:10px;
-    padding:7px 0;
-    font-family:"Courier New",monospace;
-    font-weight:800;
-    font-size:19px;
-    color:var(--gold-light);
-    box-shadow:inset 0 0 10px rgba(255,209,102,0.12);
-  }
-  .ctd-unit .ctd-tag{
-    margin-top:4px;
-    font-size:9.5px;
-    letter-spacing:0.1em;
-    color:var(--text-dim);
-    text-transform:uppercase;
-  }
-  .ctd-note{
-    text-align:center;
-    margin-top:9px;
-    font-size:11px;
-    color:var(--text-dim);
-    line-height:1.4;
-  }
+    .app {
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      padding: 8px 16px 80px;
+    }
 
-  /* ---------- WHEEL STAGE ---------- */
-  .wheel-stage{
-    position:relative;
-    width:min(86vw, 320px);
-    height:min(86vw, 320px);
-    margin:26px auto 6px;
-    flex-shrink: 0;
-  }
-  .bulb-ring{ position:absolute; inset:0; }
-  .bulb{
-    position:absolute;
-    top:50%; left:50%;
-    width:9px; height:9px;
-    border-radius:50%;
-    background:var(--gold-light);
-    box-shadow:0 0 8px 2px rgba(255,209,102,0.7);
-    margin:-4.5px;
-    animation: twinkle 1.6s ease-in-out infinite;
-  }
-  @keyframes twinkle{
-    0%,100%{ opacity:0.35; transform:scale(0.85); }
-    50%{ opacity:1; transform:scale(1.15); }
-  }
+    /* ---------- HEADER ---------- */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 2px;
+    }
 
-  .pointer{
-    position:absolute;
-    top:-2px; left:50%;
-    width:0; height:0;
-    margin-left:-13px;
-    border-left:13px solid transparent;
-    border-right:13px solid transparent;
-    border-top:22px solid var(--gold);
-    filter:drop-shadow(0 3px 4px rgba(0,0,0,0.5));
-    z-index:5;
-    transform:rotate(180deg);
-    transform-origin:13px 0;
-  }
+    .icon-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
 
-  .wheel-outer{
-    position:absolute;
-    inset:7%;
-    border-radius:50%;
-    background:radial-gradient(circle, #fff6df 0%, var(--gold) 60%, #b8860b 100%);
-    box-shadow:0 0 0 4px rgba(255,255,255,0.08), 0 14px 30px rgba(0,0,0,0.5);
-    padding:9px;
-  }
-  .wheel{
-    position:relative;
-    width:100%; height:100%;
-    border-radius:50%;
-    overflow:hidden;
-    border:3px solid rgba(255,255,255,0.5);
-    transition: transform 3.6s cubic-bezier(.12,.66,.1,1);
-  }
-  .seg-label{
-    position:absolute;
-    top:50%; left:50%;
-    width:74px;
-    margin-left:-37px;
-    text-align:center;
-    font-size:11.5px;
-    font-weight:800;
-    color:rgba(255,255,255,0.95);
-    text-shadow:0 1px 3px rgba(0,0,0,0.55);
-    line-height:1.15;
-  }
-  .seg-label .amt{ display:block; font-size:13.5px; }
+    .header .title {
+      font-weight: 800;
+      font-size: 17px;
+      letter-spacing: 0.03em;
+      color: var(--gold-light);
+      text-shadow: 0 0 16px rgba(255, 209, 102, 0.4);
+    }
 
-  .hub{
-    position:absolute;
-    top:50%; left:50%;
-    width:25%; height:25%;
-    margin:-12.5% 0 0 -12.5%;
-    border-radius:50%;
-    background:radial-gradient(circle, #fff8e6, var(--gold) 70%, #c9961f 100%);
-    box-shadow:0 0 0 3px rgba(255,255,255,0.6), 0 0 22px rgba(255,209,102,0.65), inset 0 3px 6px rgba(255,255,255,0.6);
-    z-index:4;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-  .hub-ray{
-    position:absolute;
-    width:2px; height:46%;
-    background:linear-gradient(180deg, rgba(255,255,255,0.85), transparent);
-    top:50%; left:50%;
-    transform-origin:top center;
-    opacity:0.8;
-  }
-  .hub-core{
-    width:46%; height:46%;
-    border-radius:50%;
-    background:#fffaf0;
-    box-shadow:0 0 10px rgba(255,255,255,0.9);
-  }
+    /* ---------- COUNTDOWN CARD ---------- */
+    .countdown-card {
+      margin-top: 10px;
+      border-radius: 16px;
+      padding: 14px 14px 12px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(6px);
+    }
 
-  /* ---------- STATS ROW ---------- */
-  .stats-row{
-    display:flex;
-    gap:10px;
-    margin-top:18px;
-  }
-  .stat-pill{
-    flex:1;
-    background:var(--card);
-    border:1px solid var(--card-border);
-    border-radius:14px;
-    padding:10px 12px;
-    text-align:center;
-  }
-  .stat-pill .s-label{
-    font-size:10px;
-    letter-spacing:0.1em;
-    color:var(--text-dim);
-    text-transform:uppercase;
-    font-weight:700;
-  }
-  .stat-pill .s-value{
-    margin-top:4px;
-    font-family:"Courier New",monospace;
-    font-weight:800;
-    font-size:18px;
-    color:var(--gold-light);
-  }
+    .countdown-card .ctd-label {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
 
-  /* ---------- SPIN BUTTON ---------- */
-  .spin-btn{
-    margin-top:16px;
-    width:100%;
-    border:none;
-    border-radius:16px;
-    padding:16px 10px;
-    font-weight:800;
-    font-size:16px;
-    letter-spacing:0.05em;
-    color:#3b2406;
-    background:linear-gradient(180deg, var(--gold-light), var(--gold));
-    box-shadow:0 6px 0 rgba(0,0,0,0.35), 0 0 24px rgba(255,209,102,0.35), inset 0 1px 0 rgba(255,255,255,0.6);
-    cursor:pointer;
-  }
-  .spin-btn:active{ transform:translateY(3px); box-shadow:0 3px 0 rgba(0,0,0,0.35); }
-  .spin-btn:disabled{
-    opacity:0.45;
-    cursor:default;
-    box-shadow:0 6px 0 rgba(0,0,0,0.35);
-  }
-  .spin-sub{
-    text-align:center;
-    margin-top:8px;
-    font-size:11.5px;
-    color:var(--text-dim);
-  }
+    .ctd-grid {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
 
-  /* ---------- RESULT BANNER ---------- */
-  .result-banner{
-    text-align:center;
-    min-height:18px;
-    margin-top:12px;
-    font-weight:800;
-    font-size:14px;
-    color:var(--gold-light);
-    opacity:0;
-    transition:opacity 0.3s ease;
-  }
-  .result-banner.show{ opacity:1; }
-  .result-banner.empty{ color:var(--text-dim); }
+    .ctd-unit {
+      text-align: center;
+      width: 58px;
+    }
 
-  /* ---------- PRIZE LEGEND ---------- */
-  .legend{ margin-top:20px; }
-  .legend .label{
-    font-size:10px;
-    letter-spacing:0.14em;
-    color:var(--text-dim);
-    text-transform:uppercase;
-    font-weight:700;
-    margin-bottom:8px;
-  }
-  .legend-grid{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:7px;
-  }
-  .legend-chip{
-    border-radius:10px;
-    padding:8px 4px;
-    text-align:center;
-    font-size:10.5px;
-    font-weight:700;
-    color:rgba(255,255,255,0.95);
-    text-shadow:0 1px 2px rgba(0,0,0,0.4);
-  }
+    .ctd-box {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.02));
+      border: 1px solid rgba(255, 209, 102, 0.35);
+      border-radius: 10px;
+      padding: 7px 0;
+      font-family: "Courier New", monospace;
+      font-weight: 800;
+      font-size: 19px;
+      color: var(--gold-light);
+      box-shadow: inset 0 0 10px rgba(255, 209, 102, 0.12);
+    }
 
-  .footer-note{
-    text-align:center;
-    margin-top:18px;
-    font-size:9.5px;
-    color:rgba(246,241,255,0.35);
-  }
+    .ctd-unit .ctd-tag {
+      margin-top: 4px;
+      font-size: 9.5px;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
 
-  /* ---------- CONFETTI ---------- */
-  .confetti-layer{
-    position:fixed; inset:0;
-    pointer-events:none;
-    overflow:hidden;
-    z-index:40;
-  }
-  .confetti-bit{
-    position:absolute;
-    width:7px; height:10px;
-    top:30%;
-    opacity:0;
-  }
-  @keyframes confettiFall{
-    0%{ opacity:1; transform:translate(0,0) rotate(0deg); }
-    100%{ opacity:0; transform:translate(var(--dx), var(--dy)) rotate(var(--rot)); }
-  }
+    .ctd-note {
+      text-align: center;
+      margin-top: 9px;
+      font-size: 11px;
+      color: var(--text-dim);
+      line-height: 1.4;
+    }
 
-  /* ---------- MODAL ---------- */
-  .modal-overlay{
-    position:fixed; inset:0;
-    background:rgba(0,0,0,0.62);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding:24px;
-    z-index:50;
-  }
-  .modal-overlay.show{ display:flex; }
-  .modal-box{
-    background:linear-gradient(180deg, var(--bg-2), var(--bg-3));
-    border:1px solid rgba(255,209,102,0.4);
-    border-radius:16px;
-    padding:18px;
-    max-width:380px;
-    max-height:80vh;
-    overflow-y:auto;
-  }
-  .modal-box h3{ margin:0 0 10px; color:var(--gold-light); font-size:16px; }
-  .modal-box p, .modal-box li{ font-size:13px; line-height:1.55; color:rgba(246,241,255,0.88); }
-  .modal-box ul{ padding-left:18px; margin:8px 0; }
-  .modal-close{
-    margin-top:8px; width:100%; padding:11px; border:none; border-radius:10px;
-    background:var(--gold); color:#2b1f06; font-weight:800; cursor:pointer;
-  }
+    /* ---------- WHEEL STAGE ---------- */
+    .wheel-stage {
+      position: relative;
+      width: min(86vw, 320px);
+      height: min(86vw, 320px);
+      margin: 26px auto 6px;
+      flex-shrink: 0;
+    }
 
-  .toast{
-    position:fixed; bottom:18px; left:50%;
-    transform:translateX(-50%) translateY(20px);
-    background:rgba(0,0,0,0.85); color:var(--text);
-    padding:10px 18px; border-radius:30px; font-size:13px; font-weight:600;
-    border:1px solid rgba(255,209,102,0.5);
-    opacity:0; transition:opacity 0.25s ease, transform 0.25s ease;
-    pointer-events:none; z-index:60;
-  }
-  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
-</style>
+    .bulb-ring {
+      position: absolute;
+      inset: 0;
+    }
+
+    .bulb {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--gold-light);
+      box-shadow: 0 0 8px 2px rgba(255, 209, 102, 0.7);
+      margin: -4.5px;
+      animation: twinkle 1.6s ease-in-out infinite;
+    }
+
+    @keyframes twinkle {
+
+      0%,
+      100% {
+        opacity: 0.35;
+        transform: scale(0.85);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.15);
+      }
+    }
+
+    .pointer {
+      position: absolute;
+      top: -2px;
+      left: 50%;
+      width: 0;
+      height: 0;
+      margin-left: -13px;
+      border-left: 13px solid transparent;
+      border-right: 13px solid transparent;
+      border-top: 22px solid var(--gold);
+      filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.5));
+      z-index: 5;
+      transform: rotate(180deg);
+      transform-origin: 13px 0;
+    }
+
+    .wheel-outer {
+      position: absolute;
+      inset: 7%;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fff6df 0%, var(--gold) 60%, #b8860b 100%);
+      box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.08), 0 14px 30px rgba(0, 0, 0, 0.5);
+      padding: 9px;
+    }
+
+    .wheel {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid rgba(255, 255, 255, 0.5);
+      transition: transform 3.6s cubic-bezier(.12, .66, .1, 1);
+    }
+
+    .seg-label {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 74px;
+      margin-left: -37px;
+      text-align: center;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.95);
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
+      line-height: 1.15;
+    }
+
+    .seg-label .amt {
+      display: block;
+      font-size: 13.5px;
+    }
+
+    .hub {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 25%;
+      height: 25%;
+      margin: -12.5% 0 0 -12.5%;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fff8e6, var(--gold) 70%, #c9961f 100%);
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.6), 0 0 22px rgba(255, 209, 102, 0.65), inset 0 3px 6px rgba(255, 255, 255, 0.6);
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hub-ray {
+      position: absolute;
+      width: 2px;
+      height: 46%;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.85), transparent);
+      top: 50%;
+      left: 50%;
+      transform-origin: top center;
+      opacity: 0.8;
+    }
+
+    .hub-core {
+      width: 46%;
+      height: 46%;
+      border-radius: 50%;
+      background: #fffaf0;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
+    }
+
+    /* ---------- STATS ROW ---------- */
+    .stats-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .stat-pill {
+      flex: 1;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 10px 12px;
+      text-align: center;
+    }
+
+    .stat-pill .s-label {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .stat-pill .s-value {
+      margin-top: 4px;
+      font-family: "Courier New", monospace;
+      font-weight: 800;
+      font-size: 18px;
+      color: var(--gold-light);
+    }
+
+    /* ---------- SPIN BUTTON ---------- */
+    .spin-btn {
+      margin-top: 16px;
+      width: 100%;
+      border: none;
+      border-radius: 16px;
+      padding: 16px 10px;
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: 0.05em;
+      color: #3b2406;
+      background: linear-gradient(180deg, var(--gold-light), var(--gold));
+      box-shadow: 0 6px 0 rgba(0, 0, 0, 0.35), 0 0 24px rgba(255, 209, 102, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+    }
+
+    .spin-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 3px 0 rgba(0, 0, 0, 0.35);
+    }
+
+    .spin-btn:disabled {
+      opacity: 0.45;
+      cursor: default;
+      box-shadow: 0 6px 0 rgba(0, 0, 0, 0.35);
+    }
+
+    .spin-sub {
+      text-align: center;
+      margin-top: 8px;
+      font-size: 11.5px;
+      color: var(--text-dim);
+    }
+
+    /* ---------- RESULT BANNER ---------- */
+    .result-banner {
+      text-align: center;
+      min-height: 18px;
+      margin-top: 12px;
+      font-weight: 800;
+      font-size: 14px;
+      color: var(--gold-light);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .result-banner.show {
+      opacity: 1;
+    }
+
+    .result-banner.empty {
+      color: var(--text-dim);
+    }
+
+    /* ---------- PRIZE LEGEND ---------- */
+    .legend {
+      margin-top: 20px;
+    }
+
+    .legend .label {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .legend-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 7px;
+    }
+
+    .legend-chip {
+      border-radius: 10px;
+      padding: 8px 4px;
+      text-align: center;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.95);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 9.5px;
+      color: rgba(246, 241, 255, 0.35);
+    }
+
+    /* ---------- CONFETTI ---------- */
+    .confetti-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 40;
+    }
+
+    .confetti-bit {
+      position: absolute;
+      width: 7px;
+      height: 10px;
+      top: 30%;
+      opacity: 0;
+    }
+
+    @keyframes confettiFall {
+      0% {
+        opacity: 1;
+        transform: translate(0, 0) rotate(0deg);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(var(--dx), var(--dy)) rotate(var(--rot));
+      }
+    }
+
+    /* ---------- MODAL ---------- */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.62);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 50;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal-box {
+      background: linear-gradient(180deg, var(--bg-2), var(--bg-3));
+      border: 1px solid rgba(255, 209, 102, 0.4);
+      border-radius: 16px;
+      padding: 18px;
+      max-width: 380px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .modal-box h3 {
+      margin: 0 0 10px;
+      color: var(--gold-light);
+      font-size: 16px;
+    }
+
+    .modal-box p,
+    .modal-box li {
+      font-size: 13px;
+      line-height: 1.55;
+      color: rgba(246, 241, 255, 0.88);
+    }
+
+    .modal-box ul {
+      padding-left: 18px;
+      margin: 8px 0;
+    }
+
+    .modal-close {
+      margin-top: 8px;
+      width: 100%;
+      padding: 11px;
+      border: none;
+      border-radius: 10px;
+      background: var(--gold);
+      color: #2b1f06;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(0, 0, 0, 0.85);
+      color: var(--text);
+      padding: 10px 18px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid rgba(255, 209, 102, 0.5);
+      opacity: 0;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      pointer-events: none;
+      z-index: 60;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="app">
+  <div class="app">
 
-  <div class="header">
-    <div class="icon-btn" id="backBtn">←</div>
-    <div class="title">Lucky Wheel</div>
-    <div class="icon-btn" id="helpBtn">?</div>
-  </div>
-
-  <div class="countdown-card" id="countdownCard">
-    <div class="ctd-label" id="ctdLabel">Next free spin in</div>
-    <div class="ctd-grid">
-      <div class="ctd-unit"><div class="ctd-box" id="ctdHour">00</div><div class="ctd-tag">Hour</div></div>
-      <div class="ctd-unit"><div class="ctd-box" id="ctdMin">00</div><div class="ctd-tag">Min</div></div>
-      <div class="ctd-unit"><div class="ctd-box" id="ctdSec">00</div><div class="ctd-tag">Sec</div></div>
+    <div class="header">
+      <div class="icon-btn" id="backBtn">←</div>
+      <div class="title">Lucky Wheel</div>
+      <div class="icon-btn" id="helpBtn">?</div>
     </div>
-    <div class="ctd-note" id="ctdNote">You earn 1 free spin every 2 hours, up to 5 saved up</div>
-  </div>
 
-  <div class="wheel-stage">
-    <div class="bulb-ring" id="bulbRing"></div>
-    <div class="pointer"></div>
-    <div class="wheel-outer">
-      <div class="wheel" id="wheel"></div>
+    <div class="countdown-card" id="countdownCard">
+      <div class="ctd-label" id="ctdLabel">Next free spin in</div>
+      <div class="ctd-grid">
+        <div class="ctd-unit">
+          <div class="ctd-box" id="ctdHour">00</div>
+          <div class="ctd-tag">Hour</div>
+        </div>
+        <div class="ctd-unit">
+          <div class="ctd-box" id="ctdMin">00</div>
+          <div class="ctd-tag">Min</div>
+        </div>
+        <div class="ctd-unit">
+          <div class="ctd-box" id="ctdSec">00</div>
+          <div class="ctd-tag">Sec</div>
+        </div>
+      </div>
+      <div class="ctd-note" id="ctdNote">You earn 1 free spin every 2 hours, up to 5 saved up</div>
     </div>
-    <div class="hub" id="hub">
-      <div class="hub-core"></div>
+
+    <div class="wheel-stage">
+      <div class="bulb-ring" id="bulbRing"></div>
+      <div class="pointer"></div>
+      <div class="wheel-outer">
+        <div class="wheel" id="wheel"></div>
+      </div>
+      <div class="hub" id="hub">
+        <div class="hub-core"></div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-pill">
+        <div class="s-label">Balance</div>
+        <div class="s-value" id="balanceVal">0 coins</div>
+      </div>
+      <div class="stat-pill">
+        <div class="s-label">Chances left</div>
+        <div class="s-value" id="chancesVal">0</div>
+      </div>
+    </div>
+
+    <button class="spin-btn" id="spinBtn" disabled>SPIN ×1</button>
+    <div class="spin-sub" id="spinSub">No chances remaining — check back soon</div>
+
+    <div class="result-banner" id="resultBanner"></div>
+
+    <div class="legend">
+      <div class="label">On the wheel</div>
+      <div class="legend-grid" id="legendGrid"></div>
+    </div>
+
+    <div class="footer-note">Lucky Wheel rewards are in-app coins only.</div>
+  </div>
+
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box">
+      <h3>How it works</h3>
+      <p>Spin the Lucky Wheel to win coins. Every spin uses one chance.</p>
+      <ul>
+        <li>You earn 1 free chance every 2 hours, automatically — no need to do anything.</li>
+        <li>Chances can be saved up to a max of 5 at a time.</li>
+        <li>Once you're at the max, the timer pauses until you spend a chance.</li>
+        <li>Landing on a coin prize adds that amount straight to your balance.</li>
+        <li>"Try Again" means no coins were won that spin.</li>
+      </ul>
+      <button class="modal-close" id="modalClose">OK</button>
     </div>
   </div>
 
-  <div class="stats-row">
-    <div class="stat-pill">
-      <div class="s-label">Balance</div>
-      <div class="s-value" id="balanceVal">0 coins</div>
-    </div>
-    <div class="stat-pill">
-      <div class="s-label">Chances left</div>
-      <div class="s-value" id="chancesVal">0</div>
-    </div>
-  </div>
+  <div class="toast" id="toast"></div>
 
-  <button class="spin-btn" id="spinBtn" disabled>SPIN ×1</button>
-  <div class="spin-sub" id="spinSub">No chances remaining — check back soon</div>
+  <script>
+    (function () {
+      "use strict";
 
-  <div class="result-banner" id="resultBanner"></div>
+      /* ================= CONFIG ================= */
+      var MAX_CHANCES = 5;
+      var CHANCE_INTERVAL_MS = 2 * 60 * 60 * 1000; // 1 free chance every 2 hours
+      var MAX_BALANCE = 999999999;
 
-  <div class="legend">
-    <div class="label">On the wheel</div>
-    <div class="legend-grid" id="legendGrid"></div>
-  </div>
+      // 8 segments: label, coin amount, color. Weighted by `w` (out of 100).
+      var PRIZES = Object.freeze([
+        { label: "5", amt: 5, color: "var(--coral)", w: 22 },
+        { label: "20", amt: 20, color: "var(--tangerine)", w: 18 },
+        { label: "10", amt: 10, color: "var(--violet)", w: 20 },
+        { label: "50", amt: 50, color: "var(--sky)", w: 10 },
+        { label: "AGAIN", amt: 0, color: "var(--indigo)", w: 12 },
+        { label: "30", amt: 30, color: "var(--mint)", w: 12 },
+        { label: "100", amt: 100, color: "var(--rose)", w: 5 },
+        { label: "200", amt: 200, color: "var(--gold)", w: 1 }
+      ]);
+      var SEG_ANGLE = 360 / PRIZES.length;
 
-  <div class="footer-note">Lucky Wheel rewards are in-app coins only.</div>
-</div>
+      /* ================= STORAGE / INTEGRITY =================
+         Same lightweight tamper-detection as the Color Game: values are
+         stored with a checksum so a hand-edited localStorage number gets
+         rejected and reset, rather than silently accepted. This deters
+         casual save-editing; it can't stop someone with full device access. */
+      var STORAGE_KEY = "luckyWheel_v1";
+      var SALT = "lw-solas-v1-4c2e9b";
 
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal-box">
-    <h3>How it works</h3>
-    <p>Spin the Lucky Wheel to win coins. Every spin uses one chance.</p>
-    <ul>
-      <li>You earn 1 free chance every 2 hours, automatically — no need to do anything.</li>
-      <li>Chances can be saved up to a max of 5 at a time.</li>
-      <li>Once you're at the max, the timer pauses until you spend a chance.</li>
-      <li>Landing on a coin prize adds that amount straight to your balance.</li>
-      <li>"Try Again" means no coins were won that spin.</li>
-    </ul>
-    <button class="modal-close" id="modalClose">OK</button>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script>
-(function(){
-  "use strict";
-
-  /* ================= CONFIG ================= */
-  var MAX_CHANCES = 5;
-  var CHANCE_INTERVAL_MS = 2 * 60 * 60 * 1000; // 1 free chance every 2 hours
-  var MAX_BALANCE = 999999999;
-
-  // 8 segments: label, coin amount, color. Weighted by `w` (out of 100).
-  var PRIZES = Object.freeze([
-    { label:"5",   amt:5,   color:"var(--coral)",     w:22 },
-    { label:"20",  amt:20,  color:"var(--tangerine)", w:18 },
-    { label:"10",  amt:10,  color:"var(--violet)",    w:20 },
-    { label:"50",  amt:50,  color:"var(--sky)",       w:10 },
-    { label:"AGAIN", amt:0, color:"var(--indigo)",    w:12 },
-    { label:"30",  amt:30,  color:"var(--mint)",      w:12 },
-    { label:"100", amt:100, color:"var(--rose)",      w:5  },
-    { label:"200", amt:200, color:"var(--gold)",       w:1  }
-  ]);
-  var SEG_ANGLE = 360 / PRIZES.length;
-
-  /* ================= STORAGE / INTEGRITY =================
-     Same lightweight tamper-detection as the Color Game: values are
-     stored with a checksum so a hand-edited localStorage number gets
-     rejected and reset, rather than silently accepted. This deters
-     casual save-editing; it can't stop someone with full device access. */
-  var STORAGE_KEY = "luckyWheel_v1";
-  var SALT = "lw-solas-v1-4c2e9b";
-
-  function fnvHash(str){
-    var h = 0x811c9dc5;
-    for(var i=0;i<str.length;i++){
-      h ^= str.charCodeAt(i);
-      h = Math.imul(h, 0x01000193);
-    }
-    return (h>>>0).toString(36);
-  }
-  function clampInt(n, max){
-    if(typeof n !== "number" || !isFinite(n) || n < 0) return 0;
-    n = Math.floor(n);
-    return Math.min(n, max);
-  }
-  function clampTimestamp(n){
-    if(typeof n !== "number" || !isFinite(n) || n < 0) return Date.now();
-    return Math.floor(n);
-  }
-
-  var tamperDetected = false;
-
-  function loadState(){
-    var fallback = { balance:0, chances:MAX_CHANCES, nextChanceAt:Date.now() + CHANCE_INTERVAL_MS };
-    try{
-      var raw = localStorage.getItem(STORAGE_KEY);
-      if(!raw) return fallback;
-      var idx = raw.lastIndexOf(".");
-      if(idx === -1) { tamperDetected = true; return fallback; }
-      var payload = raw.slice(0, idx);
-      var sig = raw.slice(idx+1);
-      if(fnvHash(SALT + payload) !== sig){ tamperDetected = true; return fallback; }
-      var data = JSON.parse(payload);
-      return {
-        balance: clampInt(data.balance, MAX_BALANCE),
-        chances: clampInt(data.chances, MAX_CHANCES),
-        nextChanceAt: clampTimestamp(data.nextChanceAt)
-      };
-    }catch(e){
-      tamperDetected = true;
-      return fallback;
-    }
-  }
-
-  function saveState(){
-    state.balance = clampInt(state.balance, MAX_BALANCE);
-    state.chances = clampInt(state.chances, MAX_CHANCES);
-    state.nextChanceAt = clampTimestamp(state.nextChanceAt);
-    try{
-      var payload = JSON.stringify({ balance:state.balance, chances:state.chances, nextChanceAt:state.nextChanceAt });
-      var sig = fnvHash(SALT + payload);
-      localStorage.setItem(STORAGE_KEY, payload + "." + sig);
-    }catch(e){}
-  }
-
-  function secureRandom(){
-    try{
-      if(window.crypto && window.crypto.getRandomValues){
-        var arr = new Uint32Array(1);
-        window.crypto.getRandomValues(arr);
-        return arr[0] / 4294967296;
+      function fnvHash(str) {
+        var h = 0x811c9dc5;
+        for (var i = 0; i < str.length; i++) {
+          h ^= str.charCodeAt(i);
+          h = Math.imul(h, 0x01000193);
+        }
+        return (h >>> 0).toString(36);
       }
-    }catch(e){}
-    return Math.random();
-  }
-  function secureRandomInt(maxExclusive){
-    return Math.floor(secureRandom() * maxExclusive);
-  }
-
-  var state = loadState();
-
-  function getInitialCredits(){
-    var fromGlobal = Number(window.__INITIAL_CREDITS);
-    if(isFinite(fromGlobal) && fromGlobal >= 0) return clampInt(fromGlobal, MAX_BALANCE);
-    try{
-      var params = new URLSearchParams(window.location.search || "");
-      var fromQuery = Number(params.get("coins"));
-      if(isFinite(fromQuery) && fromQuery >= 0) return clampInt(fromQuery, MAX_BALANCE);
-    }catch(e){}
-    return null;
-  }
-
-  function postWalletMessage(type, amount){
-    var payload = JSON.stringify({
-      source: "Lucky Wheel",
-      type: type,
-      amount: Math.abs(amount || 0),
-      delta: type === "bet" ? -Math.abs(amount || 0) : Math.abs(amount || 0),
-      balance: state.balance
-    });
-    try{
-      if(window.WalletChannel && window.WalletChannel.postMessage){
-        window.WalletChannel.postMessage(payload);
+      function clampInt(n, max) {
+        if (typeof n !== "number" || !isFinite(n) || n < 0) return 0;
+        n = Math.floor(n);
+        return Math.min(n, max);
       }
-    }catch(e){}
-  }
-
-  var initialCredits = getInitialCredits();
-  if(initialCredits !== null){
-    state.balance = initialCredits;
-    saveState();
-  }
-
-  // Catch up silently on any chances earned while the app was closed.
-  (function catchUpOffline(){
-    var now = Date.now();
-    var changed = false;
-    while(state.chances < MAX_CHANCES && now >= state.nextChanceAt){
-      state.chances++;
-      state.nextChanceAt += CHANCE_INTERVAL_MS;
-      changed = true;
-    }
-    if(state.chances >= MAX_CHANCES){
-      // Fully topped up — timer stays paused until a chance is spent.
-      state.nextChanceAt = now + CHANCE_INTERVAL_MS;
-      changed = true;
-    }
-    if(changed) saveState();
-  })();
-
-  var isSpinning = false;
-  var currentRotation = 0;
-
-  function vibrate(p){ try{ if(navigator.vibrate) navigator.vibrate(p); }catch(e){} }
-
-  var actx = null;
-  function beep(freq, dur, type, vol){
-    try{
-      if(!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
-      var osc = actx.createOscillator(), gain = actx.createGain();
-      osc.type = type || "sine"; osc.frequency.value = freq;
-      gain.gain.value = vol || 0.06;
-      osc.connect(gain); gain.connect(actx.destination);
-      osc.start();
-      gain.gain.exponentialRampToValueAtTime(0.0001, actx.currentTime + dur);
-      osc.stop(actx.currentTime + dur);
-    }catch(e){}
-  }
-
-  function toast(msg){
-    var t = document.getElementById("toast");
-    t.textContent = msg;
-    t.classList.add("show");
-    clearTimeout(t._timer);
-    t._timer = setTimeout(function(){ t.classList.remove("show"); }, 1800);
-  }
-
-  /* ================= BUILD WHEEL ================= */
-  function buildWheel(){
-    var wheel = document.getElementById("wheel");
-    var stops = [];
-    PRIZES.forEach(function(p, i){
-      var from = (i * SEG_ANGLE).toFixed(2);
-      var to = ((i+1) * SEG_ANGLE).toFixed(2);
-      stops.push(p.color + " " + from + "deg " + to + "deg");
-    });
-    wheel.style.background = "conic-gradient(" + stops.join(",") + ")";
-
-    PRIZES.forEach(function(p, i){
-      var center = i * SEG_ANGLE + SEG_ANGLE/2;
-      var label = document.createElement("div");
-      label.className = "seg-label";
-      label.style.transform = "rotate(" + center + "deg) translate(0,-78px) rotate(" + (-center) + "deg)";
-      label.innerHTML = (p.amt > 0 ? '<span class="amt">'+p.amt+'</span>coins' : '<span class="amt">↺</span>'+p.label);
-      wheel.appendChild(label);
-    });
-  }
-
-  function buildBulbRing(){
-    var ring = document.getElementById("bulbRing");
-    var count = 16;
-    for(var i=0;i<count;i++){
-      var angle = (360/count) * i;
-      var b = document.createElement("div");
-      b.className = "bulb";
-      b.style.transform = "rotate("+angle+"deg) translate(0,-150px)";
-      b.style.animationDelay = (i * 0.1) + "s";
-      ring.appendChild(b);
-    }
-  }
-
-  function buildHubRays(){
-    var hub = document.getElementById("hub");
-    var count = 8;
-    for(var i=0;i<count;i++){
-      var ray = document.createElement("div");
-      ray.className = "hub-ray";
-      ray.style.transform = "translate(-50%,-100%) rotate(" + (i * (360/count)) + "deg)";
-      hub.appendChild(ray);
-    }
-  }
-
-  function buildLegend(){
-    var grid = document.getElementById("legendGrid");
-    PRIZES.forEach(function(p){
-      var chip = document.createElement("div");
-      chip.className = "legend-chip";
-      chip.style.background = p.color;
-      chip.textContent = p.amt > 0 ? (p.amt + " coins") : "Try again";
-      grid.appendChild(chip);
-    });
-  }
-
-  /* ================= RENDER ================= */
-  function renderStats(){
-    document.getElementById("balanceVal").textContent = state.balance.toLocaleString("en-US") + " coins";
-    document.getElementById("chancesVal").textContent = state.chances;
-    var btn = document.getElementById("spinBtn");
-    var sub = document.getElementById("spinSub");
-    var canSpin = !isSpinning && state.chances > 0;
-    btn.disabled = !canSpin;
-    if(isSpinning){
-      sub.textContent = "Spinning…";
-    }else if(state.chances > 0){
-      sub.textContent = "Uses 1 chance per spin";
-    }else{
-      sub.textContent = "No chances remaining — check back soon";
-    }
-  }
-
-  var initializing = true;
-
-  function renderCountdown(){
-    var now = Date.now();
-    var gained = false;
-
-    // Regenerate chances in real time while the page is open.
-    if(state.chances < MAX_CHANCES){
-      while(state.chances < MAX_CHANCES && now >= state.nextChanceAt){
-        state.chances++;
-        state.nextChanceAt += CHANCE_INTERVAL_MS;
-        gained = true;
+      function clampTimestamp(n) {
+        if (typeof n !== "number" || !isFinite(n) || n < 0) return Date.now();
+        return Math.floor(n);
       }
-      saveState();
+
+      var tamperDetected = false;
+
+      function loadState() {
+        var fallback = { balance: 0, chances: MAX_CHANCES, nextChanceAt: Date.now() + CHANCE_INTERVAL_MS };
+        try {
+          var raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return fallback;
+          var idx = raw.lastIndexOf(".");
+          if (idx === -1) { tamperDetected = true; return fallback; }
+          var payload = raw.slice(0, idx);
+          var sig = raw.slice(idx + 1);
+          if (fnvHash(SALT + payload) !== sig) { tamperDetected = true; return fallback; }
+          var data = JSON.parse(payload);
+          return {
+            balance: clampInt(data.balance, MAX_BALANCE),
+            chances: clampInt(data.chances, MAX_CHANCES),
+            nextChanceAt: clampTimestamp(data.nextChanceAt)
+          };
+        } catch (e) {
+          tamperDetected = true;
+          return fallback;
+        }
+      }
+
+      function saveState() {
+        state.balance = clampInt(state.balance, MAX_BALANCE);
+        state.chances = clampInt(state.chances, MAX_CHANCES);
+        state.nextChanceAt = clampTimestamp(state.nextChanceAt);
+        try {
+          var payload = JSON.stringify({ balance: state.balance, chances: state.chances, nextChanceAt: state.nextChanceAt });
+          var sig = fnvHash(SALT + payload);
+          localStorage.setItem(STORAGE_KEY, payload + "." + sig);
+        } catch (e) { }
+      }
+
+      function secureRandom() {
+        try {
+          if (window.crypto && window.crypto.getRandomValues) {
+            var arr = new Uint32Array(1);
+            window.crypto.getRandomValues(arr);
+            return arr[0] / 4294967296;
+          }
+        } catch (e) { }
+        return Math.random();
+      }
+      function secureRandomInt(maxExclusive) {
+        return Math.floor(secureRandom() * maxExclusive);
+      }
+
+      var state = loadState();
+
+      function getInitialCredits() {
+        var fromGlobal = Number(window.__INITIAL_CREDITS);
+        if (isFinite(fromGlobal) && fromGlobal >= 0) return clampInt(fromGlobal, MAX_BALANCE);
+        try {
+          var params = new URLSearchParams(window.location.search || "");
+          var fromQuery = Number(params.get("coins"));
+          if (isFinite(fromQuery) && fromQuery >= 0) return clampInt(fromQuery, MAX_BALANCE);
+        } catch (e) { }
+        return null;
+      }
+
+      function postWalletMessage(type, amount) {
+        var payload = JSON.stringify({
+          source: "Lucky Wheel",
+          type: type,
+          amount: Math.abs(amount || 0),
+          delta: type === "bet" ? -Math.abs(amount || 0) : Math.abs(amount || 0),
+          balance: state.balance
+        });
+        try {
+          if (window.WalletChannel && window.WalletChannel.postMessage) {
+            window.WalletChannel.postMessage(payload);
+          }
+        } catch (e) { }
+      }
+
+      var initialCredits = getInitialCredits();
+      if (initialCredits !== null) {
+        state.balance = initialCredits;
+        saveState();
+      }
+
+      // Catch up silently on any chances earned while the app was closed.
+      (function catchUpOffline() {
+        var now = Date.now();
+        var changed = false;
+        while (state.chances < MAX_CHANCES && now >= state.nextChanceAt) {
+          state.chances++;
+          state.nextChanceAt += CHANCE_INTERVAL_MS;
+          changed = true;
+        }
+        if (state.chances >= MAX_CHANCES) {
+          // Fully topped up — timer stays paused until a chance is spent.
+          state.nextChanceAt = now + CHANCE_INTERVAL_MS;
+          changed = true;
+        }
+        if (changed) saveState();
+      })();
+
+      var isSpinning = false;
+      var currentRotation = 0;
+
+      function vibrate(p) { try { if (navigator.vibrate) navigator.vibrate(p); } catch (e) { } }
+
+      var actx = null;
+      function beep(freq, dur, type, vol) {
+        try {
+          if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+          var osc = actx.createOscillator(), gain = actx.createGain();
+          osc.type = type || "sine"; osc.frequency.value = freq;
+          gain.gain.value = vol || 0.06;
+          osc.connect(gain); gain.connect(actx.destination);
+          osc.start();
+          gain.gain.exponentialRampToValueAtTime(0.0001, actx.currentTime + dur);
+          osc.stop(actx.currentTime + dur);
+        } catch (e) { }
+      }
+
+      function toast(msg) {
+        var t = document.getElementById("toast");
+        t.textContent = msg;
+        t.classList.add("show");
+        clearTimeout(t._timer);
+        t._timer = setTimeout(function () { t.classList.remove("show"); }, 1800);
+      }
+
+      /* ================= BUILD WHEEL ================= */
+      function buildWheel() {
+        var wheel = document.getElementById("wheel");
+        var stops = [];
+        PRIZES.forEach(function (p, i) {
+          var from = (i * SEG_ANGLE).toFixed(2);
+          var to = ((i + 1) * SEG_ANGLE).toFixed(2);
+          stops.push(p.color + " " + from + "deg " + to + "deg");
+        });
+        wheel.style.background = "conic-gradient(" + stops.join(",") + ")";
+
+        PRIZES.forEach(function (p, i) {
+          var center = i * SEG_ANGLE + SEG_ANGLE / 2;
+          var label = document.createElement("div");
+          label.className = "seg-label";
+          label.style.transform = "rotate(" + center + "deg) translate(0,-78px) rotate(" + (-center) + "deg)";
+          label.innerHTML = (p.amt > 0 ? '<span class="amt">' + p.amt + '</span>coins' : '<span class="amt">↺</span>' + p.label);
+          wheel.appendChild(label);
+        });
+      }
+
+      function buildBulbRing() {
+        var ring = document.getElementById("bulbRing");
+        var count = 16;
+        for (var i = 0; i < count; i++) {
+          var angle = (360 / count) * i;
+          var b = document.createElement("div");
+          b.className = "bulb";
+          b.style.transform = "rotate(" + angle + "deg) translate(0,-150px)";
+          b.style.animationDelay = (i * 0.1) + "s";
+          ring.appendChild(b);
+        }
+      }
+
+      function buildHubRays() {
+        var hub = document.getElementById("hub");
+        var count = 8;
+        for (var i = 0; i < count; i++) {
+          var ray = document.createElement("div");
+          ray.className = "hub-ray";
+          ray.style.transform = "translate(-50%,-100%) rotate(" + (i * (360 / count)) + "deg)";
+          hub.appendChild(ray);
+        }
+      }
+
+      function buildLegend() {
+        var grid = document.getElementById("legendGrid");
+        PRIZES.forEach(function (p) {
+          var chip = document.createElement("div");
+          chip.className = "legend-chip";
+          chip.style.background = p.color;
+          chip.textContent = p.amt > 0 ? (p.amt + " coins") : "Try again";
+          grid.appendChild(chip);
+        });
+      }
+
+      /* ================= RENDER ================= */
+      function renderStats() {
+        document.getElementById("balanceVal").textContent = state.balance.toLocaleString("en-US") + " coins";
+        document.getElementById("chancesVal").textContent = state.chances;
+        var btn = document.getElementById("spinBtn");
+        var sub = document.getElementById("spinSub");
+        var canSpin = !isSpinning && state.chances > 0;
+        btn.disabled = !canSpin;
+        if (isSpinning) {
+          sub.textContent = "Spinning…";
+        } else if (state.chances > 0) {
+          sub.textContent = "Uses 1 chance per spin";
+        } else {
+          sub.textContent = "No chances remaining — check back soon";
+        }
+      }
+
+      var initializing = true;
+
+      function renderCountdown() {
+        var now = Date.now();
+        var gained = false;
+
+        // Regenerate chances in real time while the page is open.
+        if (state.chances < MAX_CHANCES) {
+          while (state.chances < MAX_CHANCES && now >= state.nextChanceAt) {
+            state.chances++;
+            state.nextChanceAt += CHANCE_INTERVAL_MS;
+            gained = true;
+          }
+          saveState();
+          renderStats();
+          if (gained && !initializing) toast("🎁 +1 free spin!");
+        }
+
+        var label = document.getElementById("ctdLabel");
+        var note = document.getElementById("ctdNote");
+        var card = document.getElementById("countdownCard");
+
+        if (state.chances >= MAX_CHANCES) {
+          label.textContent = "Chances full";
+          note.textContent = "You're stocked up at " + MAX_CHANCES + " — spin to start the next timer";
+          document.getElementById("ctdHour").textContent = "--";
+          document.getElementById("ctdMin").textContent = "--";
+          document.getElementById("ctdSec").textContent = "--";
+          card.style.opacity = "0.7";
+        } else {
+          label.textContent = "Next free spin in";
+          note.textContent = "You earn 1 free spin every 2 hours, up to " + MAX_CHANCES + " saved up";
+          card.style.opacity = "1";
+          var diff = Math.max(0, state.nextChanceAt - now);
+          var totalSec = Math.floor(diff / 1000);
+          var hours = Math.floor(totalSec / 3600);
+          var mins = Math.floor((totalSec % 3600) / 60);
+          var secs = totalSec % 60;
+          function pad(n) { return (n < 10 ? "0" : "") + n; }
+          document.getElementById("ctdHour").textContent = pad(hours);
+          document.getElementById("ctdMin").textContent = pad(mins);
+          document.getElementById("ctdSec").textContent = pad(secs);
+        }
+
+        initializing = false;
+      }
+
+      /* ================= CONFETTI ================= */
+      function burstConfetti() {
+        var layer = document.createElement("div");
+        layer.className = "confetti-layer";
+        document.body.appendChild(layer);
+        var colors = ["#ffd166", "#ff6b6b", "#9b5de5", "#4cc9f0", "#06d6a0", "#ff4d8d"];
+        for (var i = 0; i < 28; i++) {
+          var bit = document.createElement("div");
+          bit.className = "confetti-bit";
+          var left = 50 + (secureRandom() * 40 - 20);
+          var dx = (secureRandom() * 240 - 120) + "px";
+          var dy = (secureRandom() * 260 + 120) + "px";
+          var rot = (secureRandom() * 720 - 360) + "deg";
+          bit.style.left = left + "%";
+          bit.style.background = colors[secureRandomInt(colors.length)];
+          bit.style.setProperty("--dx", dx);
+          bit.style.setProperty("--dy", dy);
+          bit.style.setProperty("--rot", rot);
+          bit.style.animation = "confettiFall " + (1.1 + secureRandom() * 0.6) + "s ease-out forwards";
+          bit.style.animationDelay = (secureRandom() * 0.2) + "s";
+          layer.appendChild(bit);
+        }
+        setTimeout(function () { layer.remove(); }, 2200);
+      }
+
+      /* ================= SPIN LOGIC ================= */
+      function pickPrizeIndex() {
+        var totalW = PRIZES.reduce(function (s, p) { return s + p.w; }, 0);
+        var r = secureRandom() * totalW;
+        var acc = 0;
+        for (var i = 0; i < PRIZES.length; i++) {
+          acc += PRIZES[i].w;
+          if (r < acc) return i;
+        }
+        return PRIZES.length - 1;
+      }
+
+      function spin() {
+        if (isSpinning || state.chances <= 0) return;
+        isSpinning = true;
+        var wasFull = state.chances >= MAX_CHANCES;
+        state.chances -= 1;
+        if (wasFull) {
+          // Regen was paused while at the cap — start the next 2-hour timer now.
+          state.nextChanceAt = Date.now() + CHANCE_INTERVAL_MS;
+        }
+        saveState();
+        renderStats();
+
+        var banner = document.getElementById("resultBanner");
+        banner.classList.remove("show", "empty");
+        banner.textContent = "";
+
+        var idx = pickPrizeIndex();
+        var center = idx * SEG_ANGLE + SEG_ANGLE / 2;
+        // Rotate so this segment's center lands under the fixed top pointer,
+        // always spinning forward (never snapping backward) from wherever we are.
+        var targetMod = (360 - center + 360) % 360;
+        var currentMod = ((currentRotation % 360) + 360) % 360;
+        var delta = (targetMod - currentMod + 360) % 360;
+        var newRotation = currentRotation + 360 * 5 + delta;
+        currentRotation = newRotation;
+
+        var wheel = document.getElementById("wheel");
+        wheel.style.transform = "rotate(" + newRotation + "deg)";
+
+        vibrate([0, 30, 40, 30]);
+        beep(220, 0.1, "triangle", 0.05);
+
+        setTimeout(function () {
+          var prize = PRIZES[idx];
+          if (prize.amt > 0) {
+            state.balance = clampInt(state.balance + prize.amt, MAX_BALANCE);
+            banner.classList.add("show");
+            banner.textContent = "🎉 You won " + prize.amt + " coins!";
+            postWalletMessage("win", prize.amt);
+            vibrate([0, 60, 40, 60]);
+            beep(880, 0.18, "sine", 0.07);
+            if (prize.amt >= 100) burstConfetti();
+          } else {
+            banner.classList.add("show", "empty");
+            banner.textContent = "No coins this time — try again!";
+            vibrate(70);
+          }
+          saveState();
+          isSpinning = false;
+          renderStats();
+        }, 3700);
+      }
+
+      /* ================= NAV / MODAL ================= */
+      function goBack() {
+        try {
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage({ type: "solas:back", source: "lucky-wheel" }, "*");
+            return;
+          }
+        } catch (e) { }
+        try { window.history.back(); } catch (e) { }
+      }
+
+      var modal = document.getElementById("modalOverlay");
+      document.getElementById("backBtn").addEventListener("click", goBack);
+      document.getElementById("helpBtn").addEventListener("click", function () { modal.classList.add("show"); });
+      document.getElementById("modalClose").addEventListener("click", function () { modal.classList.remove("show"); });
+      modal.addEventListener("click", function (e) { if (e.target === modal) modal.classList.remove("show"); });
+      document.getElementById("spinBtn").addEventListener("click", spin);
+
+      /* ---------- deterrents (not real security, just friction) ---------- */
+      document.addEventListener("contextmenu", function (e) { e.preventDefault(); });
+      document.addEventListener("keydown", function (e) {
+        var blocked = e.key === "F12" ||
+          (e.ctrlKey && e.shiftKey && ["I", "J", "C", "i", "j", "c"].indexOf(e.key) !== -1) ||
+          (e.ctrlKey && (e.key === "u" || e.key === "U"));
+        if (blocked) e.preventDefault();
+      });
+
+      /* ================= INIT ================= */
+      buildWheel();
+      buildBulbRing();
+      buildHubRays();
+      buildLegend();
       renderStats();
-      if(gained && !initializing) toast("🎁 +1 free spin!");
-    }
+      renderCountdown();
+      setInterval(renderCountdown, 1000);
+      if (tamperDetected) toast("Save data was invalid — progress reset");
 
-    var label = document.getElementById("ctdLabel");
-    var note = document.getElementById("ctdNote");
-    var card = document.getElementById("countdownCard");
-
-    if(state.chances >= MAX_CHANCES){
-      label.textContent = "Chances full";
-      note.textContent = "You're stocked up at " + MAX_CHANCES + " — spin to start the next timer";
-      document.getElementById("ctdHour").textContent = "--";
-      document.getElementById("ctdMin").textContent = "--";
-      document.getElementById("ctdSec").textContent = "--";
-      card.style.opacity = "0.7";
-    }else{
-      label.textContent = "Next free spin in";
-      note.textContent = "You earn 1 free spin every 2 hours, up to " + MAX_CHANCES + " saved up";
-      card.style.opacity = "1";
-      var diff = Math.max(0, state.nextChanceAt - now);
-      var totalSec = Math.floor(diff/1000);
-      var hours = Math.floor(totalSec / 3600);
-      var mins = Math.floor((totalSec % 3600) / 60);
-      var secs = totalSec % 60;
-      function pad(n){ return (n<10? "0":"") + n; }
-      document.getElementById("ctdHour").textContent = pad(hours);
-      document.getElementById("ctdMin").textContent = pad(mins);
-      document.getElementById("ctdSec").textContent = pad(secs);
-    }
-
-    initializing = false;
-  }
-
-  /* ================= CONFETTI ================= */
-  function burstConfetti(){
-    var layer = document.createElement("div");
-    layer.className = "confetti-layer";
-    document.body.appendChild(layer);
-    var colors = ["#ffd166","#ff6b6b","#9b5de5","#4cc9f0","#06d6a0","#ff4d8d"];
-    for(var i=0;i<28;i++){
-      var bit = document.createElement("div");
-      bit.className = "confetti-bit";
-      var left = 50 + (secureRandom()*40-20);
-      var dx = (secureRandom()*240-120) + "px";
-      var dy = (secureRandom()*260+120) + "px";
-      var rot = (secureRandom()*720-360) + "deg";
-      bit.style.left = left + "%";
-      bit.style.background = colors[secureRandomInt(colors.length)];
-      bit.style.setProperty("--dx", dx);
-      bit.style.setProperty("--dy", dy);
-      bit.style.setProperty("--rot", rot);
-      bit.style.animation = "confettiFall " + (1.1 + secureRandom()*0.6) + "s ease-out forwards";
-      bit.style.animationDelay = (secureRandom()*0.2) + "s";
-      layer.appendChild(bit);
-    }
-    setTimeout(function(){ layer.remove(); }, 2200);
-  }
-
-  /* ================= SPIN LOGIC ================= */
-  function pickPrizeIndex(){
-    var totalW = PRIZES.reduce(function(s,p){ return s + p.w; }, 0);
-    var r = secureRandom() * totalW;
-    var acc = 0;
-    for(var i=0;i<PRIZES.length;i++){
-      acc += PRIZES[i].w;
-      if(r < acc) return i;
-    }
-    return PRIZES.length - 1;
-  }
-
-  function spin(){
-    if(isSpinning || state.chances <= 0) return;
-    isSpinning = true;
-    var wasFull = state.chances >= MAX_CHANCES;
-    state.chances -= 1;
-    if(wasFull){
-      // Regen was paused while at the cap — start the next 2-hour timer now.
-      state.nextChanceAt = Date.now() + CHANCE_INTERVAL_MS;
-    }
-    saveState();
-    renderStats();
-
-    var banner = document.getElementById("resultBanner");
-    banner.classList.remove("show","empty");
-    banner.textContent = "";
-
-    var idx = pickPrizeIndex();
-    var center = idx * SEG_ANGLE + SEG_ANGLE/2;
-    // Rotate so this segment's center lands under the fixed top pointer,
-    // always spinning forward (never snapping backward) from wherever we are.
-    var targetMod = (360 - center + 360) % 360;
-    var currentMod = ((currentRotation % 360) + 360) % 360;
-    var delta = (targetMod - currentMod + 360) % 360;
-    var newRotation = currentRotation + 360*5 + delta;
-    currentRotation = newRotation;
-
-    var wheel = document.getElementById("wheel");
-    wheel.style.transform = "rotate(" + newRotation + "deg)";
-
-    vibrate([0,30,40,30]);
-    beep(220, 0.1, "triangle", 0.05);
-
-    setTimeout(function(){
-      var prize = PRIZES[idx];
-      if(prize.amt > 0){
-        state.balance = clampInt(state.balance + prize.amt, MAX_BALANCE);
-        banner.classList.add("show");
-        banner.textContent = "🎉 You won " + prize.amt + " coins!";
-        postWalletMessage("win", prize.amt);
-        vibrate([0,60,40,60]);
-        beep(880, 0.18, "sine", 0.07);
-        if(prize.amt >= 100) burstConfetti();
-      }else{
-        banner.classList.add("show","empty");
-        banner.textContent = "No coins this time — try again!";
-        vibrate(70);
-      }
-      saveState();
-      isSpinning = false;
-      renderStats();
-    }, 3700);
-  }
-
-  /* ================= NAV / MODAL ================= */
-  function goBack(){
-    try{
-      if(window.parent && window.parent !== window){
-        window.parent.postMessage({ type:"solas:back", source:"lucky-wheel" }, "*");
-        return;
-      }
-    }catch(e){}
-    try{ window.history.back(); }catch(e){}
-  }
-
-  var modal = document.getElementById("modalOverlay");
-  document.getElementById("backBtn").addEventListener("click", goBack);
-  document.getElementById("helpBtn").addEventListener("click", function(){ modal.classList.add("show"); });
-  document.getElementById("modalClose").addEventListener("click", function(){ modal.classList.remove("show"); });
-  modal.addEventListener("click", function(e){ if(e.target === modal) modal.classList.remove("show"); });
-  document.getElementById("spinBtn").addEventListener("click", spin);
-
-  /* ---------- deterrents (not real security, just friction) ---------- */
-  document.addEventListener("contextmenu", function(e){ e.preventDefault(); });
-  document.addEventListener("keydown", function(e){
-    var blocked = e.key === "F12" ||
-      (e.ctrlKey && e.shiftKey && ["I","J","C","i","j","c"].indexOf(e.key) !== -1) ||
-      (e.ctrlKey && (e.key === "u" || e.key === "U"));
-    if(blocked) e.preventDefault();
-  });
-
-  /* ================= INIT ================= */
-  buildWheel();
-  buildBulbRing();
-  buildHubRays();
-  buildLegend();
-  renderStats();
-  renderCountdown();
-  setInterval(renderCountdown, 1000);
-  if(tamperDetected) toast("Save data was invalid — progress reset");
-
-})();
-</script>
+    })();
+  </script>
 </body>
+
 </html>
